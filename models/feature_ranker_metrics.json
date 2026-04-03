@@ -1,0 +1,118 @@
+{
+  "test_rows": 1978,
+  "top_k": 3,
+  "hit_rate_at_k": 0.0056,
+  "recall_at_k": 0.0056,
+  "precision_at_k": 0.0019,
+  "coverage": 0.0051,
+  "sample_predictions": [
+    {
+      "user_id": 178520,
+      "target_product_name": "Energy Drink",
+      "predictions": [
+        {
+          "product_id": 44632,
+          "score": 0.1708,
+          "reason": "Sparkling Water Grapefruit: popular fallback candidate"
+        },
+        {
+          "product_id": 21616,
+          "score": 0.1693,
+          "reason": "Organic Baby Arugula: popular fallback candidate"
+        },
+        {
+          "product_id": 8277,
+          "score": 0.1649,
+          "reason": "Apple Honeycrisp Organic: popular fallback candidate"
+        }
+      ]
+    },
+    {
+      "user_id": 156122,
+      "target_product_name": "Original Black Box Tablewater Cracker",
+      "predictions": [
+        {
+          "product_id": 49235,
+          "score": 0.181,
+          "reason": "Organic Half & Half: popular fallback candidate"
+        },
+        {
+          "product_id": 44632,
+          "score": 0.1764,
+          "reason": "Sparkling Water Grapefruit: popular fallback candidate"
+        },
+        {
+          "product_id": 21616,
+          "score": 0.1749,
+          "reason": "Organic Baby Arugula: popular fallback candidate"
+        }
+      ]
+    },
+    {
+      "user_id": 18194,
+      "target_product_name": "Honeycrisp Apple",
+      "predictions": [
+        {
+          "product_id": 44632,
+          "score": 0.1694,
+          "reason": "Sparkling Water Grapefruit: popular fallback candidate"
+        },
+        {
+          "product_id": 21616,
+          "score": 0.1679,
+          "reason": "Organic Baby Arugula: popular fallback candidate"
+        },
+        {
+          "product_id": 8277,
+          "score": 0.1636,
+          "reason": "Apple Honeycrisp Organic: popular fallback candidate"
+        }
+      ]
+    },
+    {
+      "user_id": 54901,
+      "target_product_name": "Olive Oil & Aloe Vera Hand Soap",
+      "predictions": [
+        {
+          "product_id": 49235,
+          "score": 0.1696,
+          "reason": "Organic Half & Half: popular fallback candidate"
+        },
+        {
+          "product_id": 44632,
+          "score": 0.1653,
+          "reason": "Sparkling Water Grapefruit: popular fallback candidate"
+        },
+        {
+          "product_id": 21616,
+          "score": 0.1638,
+          "reason": "Organic Baby Arugula: popular fallback candidate"
+        }
+      ]
+    },
+    {
+      "user_id": 3321,
+      "target_product_name": "Organic Roma Tomato",
+      "predictions": [
+        {
+          "product_id": 49235,
+          "score": 0.1738,
+          "reason": "Organic Half & Half: popular fallback candidate"
+        },
+        {
+          "product_id": 44632,
+          "score": 0.1694,
+          "reason": "Sparkling Water Grapefruit: popular fallback candidate"
+        },
+        {
+          "product_id": 21616,
+          "score": 0.1679,
+          "reason": "Organic Baby Arugula: popular fallback candidate"
+        }
+      ]
+    }
+  ],
+  "train_baskets": 8077,
+  "train_examples": 8022,
+  "train_candidate_rows": 286108
+}

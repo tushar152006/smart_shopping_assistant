@@ -1,0 +1,145 @@
+{
+  "train_rows": 8022,
+  "test_rows": 1978,
+  "top_k": 3,
+  "hit_rate_at_k": 0.0278,
+  "recall_at_k": 0.0278,
+  "precision_at_k": 0.0093,
+  "coverage": 0.1,
+  "sample_predictions": [
+    {
+      "context_product_names": [
+        "Plain Pre-Sliced Bagels",
+        "Honey/Lemon Cough Drops",
+        "Chewy 25% Low Sugar Chocolate Chip Granola",
+        "Oats & Chocolate Chewy Bars",
+        "Kellogg's Nutri-Grain Apple Cinnamon Cereal"
+      ],
+      "target_product_name": "Energy Drink",
+      "predictions": [
+        {
+          "product_id": 42035,
+          "score": 3.0,
+          "reason": "Pure Squeezed Calcium & Vitamin D No Pulp Orange Juice: co-occurs with Kellogg's Nutri-Grain Apple Cinnamon Cereal, Nutri-Grain Soft Baked Strawberry Cereal Breakfast Bars in historical baskets"
+        },
+        {
+          "product_id": 27104,
+          "score": 2.0,
+          "reason": "Fresh Cauliflower: co-occurs with Goldfish Cheddar Baked Snack Crackers, Original Orange Juice in historical baskets"
+        },
+        {
+          "product_id": 34969,
+          "score": 2.0,
+          "reason": "Red Vine Tomato: co-occurs with Original Orange Juice in historical baskets"
+        }
+      ]
+    },
+    {
+      "context_product_names": [
+        "Bag of Organic Bananas",
+        "Just Crisp, Parmesan",
+        "Fresh Fruit Salad",
+        "Organic Raspberries",
+        "2% Reduced Fat Milk"
+      ],
+      "target_product_name": "Original Black Box Tablewater Cracker",
+      "predictions": [
+        {
+          "product_id": 21137,
+          "score": 25.0,
+          "reason": "Organic Strawberries: co-occurs with Bag of Organic Bananas, Organic Hass Avocado in historical baskets"
+        },
+        {
+          "product_id": 24964,
+          "score": 13.0,
+          "reason": "Organic Garlic: co-occurs with Bag of Organic Bananas, Organic Hass Avocado in historical baskets"
+        },
+        {
+          "product_id": 5876,
+          "score": 12.0,
+          "reason": "Organic Lemon: co-occurs with Bag of Organic Bananas, Organic Hass Avocado in historical baskets"
+        }
+      ]
+    },
+    {
+      "context_product_names": [
+        "Hair Bender Whole Bean Coffee",
+        "Organic Whole Milk",
+        "Organic Mini Homestyle Waffles",
+        "Naturals Chicken Nuggets",
+        "Unprocessed American Singles Colby-Style Cheese"
+      ],
+      "target_product_name": "Honeycrisp Apple",
+      "predictions": [
+        {
+          "product_id": 24852,
+          "score": 7.0,
+          "reason": "Banana: co-occurs with Organic Whole Milk, Organic Broccoli Florets in historical baskets"
+        },
+        {
+          "product_id": 13176,
+          "score": 7.0,
+          "reason": "Bag of Organic Bananas: co-occurs with Organic Whole Milk, Sriracha Chili Sauce in historical baskets"
+        },
+        {
+          "product_id": 16797,
+          "score": 6.0,
+          "reason": "Strawberries: co-occurs with Organic Whole Milk in historical baskets"
+        }
+      ]
+    },
+    {
+      "context_product_names": [
+        "Spring Water",
+        "Organic Extra Virgin Olive Oil",
+        "Pinto Beans No Salt Added",
+        "Honeysuckle Hand Soap"
+      ],
+      "target_product_name": "Olive Oil & Aloe Vera Hand Soap",
+      "predictions": [
+        {
+          "product_id": 13176,
+          "score": 3.0,
+          "reason": "Bag of Organic Bananas: co-occurs with Spring Water in historical baskets"
+        },
+        {
+          "product_id": 21903,
+          "score": 2.0,
+          "reason": "Organic Baby Spinach: co-occurs with Spring Water in historical baskets"
+        },
+        {
+          "product_id": 26209,
+          "score": 2.0,
+          "reason": "Limes: co-occurs with Spring Water, Organic Extra Virgin Olive Oil in historical baskets"
+        }
+      ]
+    },
+    {
+      "context_product_names": [
+        "Organic Ginger Root",
+        "Organic Chicken Bone Broth",
+        "Organic Low Sodium Chicken Cooking Stock",
+        "Original Soy Creamer",
+        "Liquid Egg Whites"
+      ],
+      "target_product_name": "Organic Roma Tomato",
+      "predictions": [
+        {
+          "product_id": 24852,
+          "score": 6.0,
+          "reason": "Banana: co-occurs with Organic Ginger Root, Organic Low Sodium Chicken Cooking Stock in historical baskets"
+        },
+        {
+          "product_id": 47209,
+          "score": 5.0,
+          "reason": "Organic Hass Avocado: co-occurs with Organic Ginger Root, Organic Sunday Bacon in historical baskets"
+        },
+        {
+          "product_id": 21137,
+          "score": 4.0,
+          "reason": "Organic Strawberries: co-occurs with Organic Ginger Root in historical baskets"
+        }
+      ]
+    }
+  ]
+}

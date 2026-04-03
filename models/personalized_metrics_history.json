@@ -1,0 +1,152 @@
+{
+  "test_rows": 32634,
+  "top_k": 3,
+  "hit_rate_at_k": 0.0993,
+  "recall_at_k": 0.0993,
+  "precision_at_k": 0.0331,
+  "coverage": 0.1306,
+  "sample_predictions": [
+    {
+      "user_id": 210,
+      "context_product_names": [
+        "Canola Oil",
+        "Organic D'Anjou Pears",
+        "2% Reduced Fat Milk",
+        "Seedless Red Grapes",
+        "Banana"
+      ],
+      "target_product_name": "Organic Strawberries",
+      "predictions": [
+        {
+          "product_id": 26209,
+          "score": 54.2903,
+          "reason": "Limes appears 1 times in this user's history; Limes: rule [\"Organic D'Anjou Pears\", 'Green Peas'] -> Limes (confidence=0.714, lift=17.395)"
+        },
+        {
+          "product_id": 21903,
+          "score": 44.6627,
+          "reason": "Organic Baby Spinach appears 14 times in this user's history; Organic Baby Spinach: rule ['Beyond Beef Beefy Crumble', 'Organic Strawberry Fruit Spread'] -> Organic Baby Spinach (confidence=0.600, lift=8.500)"
+        },
+        {
+          "product_id": 47209,
+          "score": 27.7455,
+          "reason": "Organic Hass Avocado appears 19 times in this user's history; Organic Hass Avocado: rule ['Organic Whole Peeled Baby Carrots', 'Seedless Red Grapes'] -> Organic Hass Avocado (confidence=0.582, lift=6.937)"
+        }
+      ]
+    },
+    {
+      "user_id": 210,
+      "context_product_names": [
+        "Banana",
+        "2% Reduced Fat Milk",
+        "Beyond Chicken Southwest Style Strips",
+        "Pumpkin Yoghurt",
+        "Veggie Dogs"
+      ],
+      "target_product_name": "Shredded Parmesan",
+      "predictions": [
+        {
+          "product_id": 26209,
+          "score": 38.3047,
+          "reason": "Limes appears 1 times in this user's history; Limes: rule ['Shallot', 'Organic Extra Firm Tofu'] -> Limes (confidence=0.627, lift=15.272)"
+        },
+        {
+          "product_id": 35547,
+          "score": 29.111,
+          "reason": "Organic Baby Kale appears 42 times in this user's history; Organic Baby Kale: rule ['2% Reduced Fat Milk', \"Fakin' Bacon Organic Smoky Tempeh Strips\"] -> Organic Baby Kale (confidence=0.875, lift=153.271)"
+        },
+        {
+          "product_id": 24964,
+          "score": 26.7508,
+          "reason": "Organic Garlic: rule ['Banana', 'Organic Extra Firm Tofu'] -> Organic Garlic (confidence=0.392, lift=11.178)"
+        }
+      ]
+    },
+    {
+      "user_id": 210,
+      "context_product_names": [
+        "Apple Honeycrisp Organic",
+        "Extra Sharp White Cheddar",
+        "Banana",
+        "1% Low Fat Milk",
+        "Farmstand Flaxbread Egg and Vegetarian Bacon Breakfast Sandwich"
+      ],
+      "target_product_name": "Organic Brown Rice",
+      "predictions": [
+        {
+          "product_id": 47209,
+          "score": 11.7669,
+          "reason": "Organic Hass Avocado appears 19 times in this user's history; Organic Hass Avocado: rule ['Asparation/Broccolini/Baby Broccoli', 'Blueberry Yoghurt'] -> Organic Hass Avocado (confidence=0.600, lift=7.148)"
+        },
+        {
+          "product_id": 23909,
+          "score": 11.4737,
+          "reason": "2% Reduced Fat Milk appears 61 times in this user's history; 2% Reduced Fat Milk: rule ['Extra Sharp White Cheddar', 'Blueberry Yoghurt'] -> 2% Reduced Fat Milk (confidence=0.917, lift=94.786)"
+        },
+        {
+          "product_id": 13176,
+          "score": 9.2038,
+          "reason": "Bag of Organic Bananas: rule ['Organic Grade A Free Range Large Brown Eggs', 'Organic Strawberry Fruit Spread'] -> Bag of Organic Bananas (confidence=0.571, lift=4.508)"
+        }
+      ]
+    },
+    {
+      "user_id": 210,
+      "context_product_names": [
+        "2% Reduced Fat Milk",
+        "Organic Baby Kale",
+        "Seedless Red Grapes",
+        "Marinara Sauce",
+        "Organic Yellow Squash"
+      ],
+      "target_product_name": "Sour Cream",
+      "predictions": [
+        {
+          "product_id": 24852,
+          "score": 124.2412,
+          "reason": "Banana appears 49 times in this user's history; Banana: rule ['Organic Whole Peeled Baby Carrots', 'Organic Baby Kale'] -> Banana (confidence=0.857, lift=7.027)"
+        },
+        {
+          "product_id": 32030,
+          "score": 78.1488,
+          "reason": "Extra Sharp White Cheddar appears 29 times in this user's history; Extra Sharp White Cheddar: rule ['Veggie Dogs', 'Blueberry Yoghurt'] -> Extra Sharp White Cheddar (confidence=1.000, lift=1060.403)"
+        },
+        {
+          "product_id": 13176,
+          "score": 46.4146,
+          "reason": "Bag of Organic Bananas: rule ['Organic Whole Kernel Sweet Corn No Salt Added', 'Organic Yellow Squash'] -> Bag of Organic Bananas (confidence=0.800, lift=6.311)"
+        }
+      ]
+    },
+    {
+      "user_id": 210,
+      "context_product_names": [
+        "Organic Whole Wheat Penne Rigate",
+        "Chocolate Covered Banana Bites",
+        "Blueberry Yoghurt",
+        "2% Reduced Fat Milk",
+        "Banana"
+      ],
+      "target_product_name": "Extra Sharp White Cheddar",
+      "predictions": [
+        {
+          "product_id": 21903,
+          "score": 39.8102,
+          "reason": "Organic Baby Spinach appears 14 times in this user's history; Organic Baby Spinach: rule ['Organic Cilantro', 'Organic Whole Wheat Penne Rigate'] -> Organic Baby Spinach (confidence=0.579, lift=8.202)"
+        },
+        {
+          "product_id": 26209,
+          "score": 39.7953,
+          "reason": "Limes appears 1 times in this user's history; Limes: rule ['Organic Cilantro', 'Organic Whole Wheat Penne Rigate'] -> Limes (confidence=0.684, lift=16.662)"
+        },
+        {
+          "product_id": 35547,
+          "score": 39.1845,
+          "reason": "Organic Baby Kale appears 42 times in this user's history; Organic Baby Kale: rule ['Chocolate Covered Banana Bites', '2% Reduced Fat Milk'] -> Organic Baby Kale (confidence=1.000, lift=175.166)"
+        }
+      ]
+    }
+  ],
+  "train_baskets": 158000,
+  "users_with_history": 2000
+}

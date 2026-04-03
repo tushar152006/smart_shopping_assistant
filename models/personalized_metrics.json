@@ -1,0 +1,151 @@
+{
+  "test_rows": 1978,
+  "top_k": 3,
+  "hit_rate_at_k": 0.043,
+  "recall_at_k": 0.043,
+  "precision_at_k": 0.0143,
+  "coverage": 0.0217,
+  "sample_predictions": [
+    {
+      "user_id": 178520,
+      "context_product_names": [
+        "Plain Pre-Sliced Bagels",
+        "Honey/Lemon Cough Drops",
+        "Chewy 25% Low Sugar Chocolate Chip Granola",
+        "Oats & Chocolate Chewy Bars",
+        "Kellogg's Nutri-Grain Apple Cinnamon Cereal"
+      ],
+      "target_product_name": "Energy Drink",
+      "predictions": [
+        {
+          "product_id": 24852,
+          "score": 1.5067,
+          "reason": "Banana: rule ['Traditional Snack Mix'] -> Banana (confidence=0.455, lift=3.049)"
+        },
+        {
+          "product_id": 23909,
+          "score": 0.5671,
+          "reason": "2% Reduced Fat Milk: rule ['Traditional Snack Mix'] -> 2% Reduced Fat Milk (confidence=0.273, lift=22.251)"
+        },
+        {
+          "product_id": 16797,
+          "score": 0.5576,
+          "reason": "Strawberries: rule ['Goldfish Cheddar Baked Snack Crackers'] -> Strawberries (confidence=0.188, lift=4.195)"
+        }
+      ]
+    },
+    {
+      "user_id": 156122,
+      "context_product_names": [
+        "Bag of Organic Bananas",
+        "Just Crisp, Parmesan",
+        "Fresh Fruit Salad",
+        "Organic Raspberries",
+        "2% Reduced Fat Milk"
+      ],
+      "target_product_name": "Original Black Box Tablewater Cracker",
+      "predictions": [
+        {
+          "product_id": 21137,
+          "score": 3.9397,
+          "reason": "Organic Strawberries: rule ['Organic Raspberries', 'Organic Hass Avocado'] -> Organic Strawberries (confidence=0.259, lift=3.340)"
+        },
+        {
+          "product_id": 26209,
+          "score": 3.8399,
+          "reason": "Limes: rule ['Mini Original Babybel Cheese', 'Organic Raspberries'] -> Limes (confidence=0.667, lift=15.745)"
+        },
+        {
+          "product_id": 24852,
+          "score": 3.094,
+          "reason": "Banana: rule ['Spaghetti Pasta'] -> Banana (confidence=0.444, lift=2.982)"
+        }
+      ]
+    },
+    {
+      "user_id": 18194,
+      "context_product_names": [
+        "Hair Bender Whole Bean Coffee",
+        "Organic Whole Milk",
+        "Organic Mini Homestyle Waffles",
+        "Naturals Chicken Nuggets",
+        "Unprocessed American Singles Colby-Style Cheese"
+      ],
+      "target_product_name": "Honeycrisp Apple",
+      "predictions": [
+        {
+          "product_id": 13176,
+          "score": 2.7737,
+          "reason": "Bag of Organic Bananas: rule ['Naturals Chicken Nuggets'] -> Bag of Organic Bananas (confidence=0.391, lift=3.504)"
+        },
+        {
+          "product_id": 21137,
+          "score": 1.6639,
+          "reason": "Organic Strawberries: rule ['Organic Whole Milk', 'Total Greek Strained Yogurt'] -> Organic Strawberries (confidence=0.333, lift=4.294)"
+        },
+        {
+          "product_id": 24852,
+          "score": 1.5271,
+          "reason": "Banana: rule ['Total Greek Strained Yogurt'] -> Banana (confidence=0.304, lift=2.037)"
+        }
+      ]
+    },
+    {
+      "user_id": 54901,
+      "context_product_names": [
+        "Spring Water",
+        "Organic Extra Virgin Olive Oil",
+        "Pinto Beans No Salt Added",
+        "Honeysuckle Hand Soap"
+      ],
+      "target_product_name": "Olive Oil & Aloe Vera Hand Soap",
+      "predictions": [
+        {
+          "product_id": 27966,
+          "score": 0.7814,
+          "reason": "Organic Raspberries: rule ['Organic Extra Virgin Olive Oil'] -> Organic Raspberries (confidence=0.250, lift=6.708)"
+        },
+        {
+          "product_id": 13176,
+          "score": 0.4439,
+          "reason": "Bag of Organic Bananas: rule ['Spring Water'] -> Bag of Organic Bananas (confidence=0.189, lift=1.694)"
+        },
+        {
+          "product_id": 45007,
+          "score": 0.4145,
+          "reason": "Organic Zucchini: rule ['Organic Extra Virgin Olive Oil'] -> Organic Zucchini (confidence=0.167, lift=5.753)"
+        }
+      ]
+    },
+    {
+      "user_id": 3321,
+      "context_product_names": [
+        "Organic Ginger Root",
+        "Organic Chicken Bone Broth",
+        "Organic Low Sodium Chicken Cooking Stock",
+        "Original Soy Creamer",
+        "Liquid Egg Whites"
+      ],
+      "target_product_name": "Organic Roma Tomato",
+      "predictions": [
+        {
+          "product_id": 22935,
+          "score": 1.605,
+          "reason": "Organic Yellow Onion: rule ['Organic Low Sodium Chicken Cooking Stock'] -> Organic Yellow Onion (confidence=0.267, lift=7.692)"
+        },
+        {
+          "product_id": 47209,
+          "score": 1.4628,
+          "reason": "Organic Hass Avocado: rule ['Original Soy Creamer'] -> Organic Hass Avocado (confidence=0.231, lift=3.698)"
+        },
+        {
+          "product_id": 24964,
+          "score": 1.2734,
+          "reason": "Organic Garlic: rule ['Organic Ginger Root'] -> Organic Garlic (confidence=0.198, lift=6.117)"
+        }
+      ]
+    }
+  ],
+  "train_baskets": 8077,
+  "users_with_history": 7838
+}
