@@ -34,4 +34,3 @@ Current planning docs:
 - Keep the system interpretable first, clever second
 - Use free tools where possible
 - Validate each phase before moving to the next
-
