@@ -26,3 +26,12 @@ backend/artifacts/*.pkl
 # OS
 .DS_Store
 Thumbs.db
+
+# Binaries
+*.exe
+
+# Other harnesses
+.agent/
+.claude/
+.codex/
+.opencode/
