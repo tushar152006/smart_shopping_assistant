@@ -63,4 +63,18 @@ def test_predict_empty_basket_rejected() -> None:
         "top_k": 3,
     }
     response = client.post("/api/predict", json=payload)
-    assert response.status_code == 400
+    assert response.status_code in (400, 422)
+
+
+def test_security_headers_present() -> None:
+    response = client.get("/api/health")
+    assert response.headers.get("x-content-type-options") == "nosniff"
+    assert response.headers.get("x-frame-options") == "DENY"
+    assert response.headers.get("referrer-policy") == "strict-origin-when-cross-origin"
+
+
+def test_search_query_max_length_enforced() -> None:
+    oversized_query = "a" * 150
+    response = client.get(f"/api/products/search?q={oversized_query}")
+    assert response.status_code == 422
+

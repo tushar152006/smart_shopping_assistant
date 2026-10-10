@@ -7,14 +7,20 @@ from pydantic import BaseModel, Field
 class PredictionRequest(BaseModel):
     context_product_ids: list[int] = Field(
         ...,
-        description="List of product IDs currently in the user's shopping basket",
+        min_length=1,
+        max_length=100,
+        description="List of product IDs currently in the user's shopping basket (1 to 100 items)",
     )
     user_id: Optional[int] = Field(
         None,
+        ge=0,
+        le=10_000_000,
         description="Optional user ID to provide personalized recommendations based on past purchases",
     )
     order_number: int = Field(
         10,
+        ge=1,
+        le=10_000,
         description="Current order number index for calculating purchase recency bonuses",
     )
     top_k: int = Field(

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import './App.css'
 
 const QUICK_STAPLES = [
@@ -34,99 +34,58 @@ export default function App() {
 
   // 1. Initial Load: Diagnostics & Sample Users
   useEffect(() => {
-    fetchHealth()
-    fetchSampleUsers()
+    let isMounted = true
+
+    async function loadInitialData() {
+      try {
+        const healthRes = await fetch(`${API_BASE}/api/health`)
+        if (healthRes.ok && isMounted) {
+          const healthData = await healthRes.json()
+          setHealthStatus(healthData)
+        }
+      } catch {
+        if (isMounted) {
+          setHealthStatus({ status: 'offline', total_products: 0 })
+        }
+      }
+
+      try {
+        const usersRes = await fetch(`${API_BASE}/api/users/sample`)
+        if (usersRes.ok && isMounted) {
+          const usersData = await usersRes.json()
+          setSampleUsers(usersData)
+          if (usersData.length > 0) {
+            setSelectedUser(usersData[0])
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load sample users', err)
+      }
+    }
+
+    loadInitialData()
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   // 2. Predict on basket or user change
-  useEffect(() => {
-    if (basket.length === 0) {
+  const refreshPredictions = useCallback(async (currentBasket, currentUser) => {
+    if (currentBasket.length === 0) {
       setPredictions([])
-      return
-    }
-    fetchPredictions()
-  }, [basket, selectedUser])
-
-  // 3. Search autocomplete debounce
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setSearchResults([])
-      setShowDropdown(false)
+      setPredictionError(null)
       return
     }
 
-    const timer = setTimeout(() => {
-      performSearch(searchQuery)
-    }, 200)
-
-    return () => clearTimeout(timer)
-  }, [searchQuery])
-
-  // Click outside listener for search dropdown
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (searchBoxRef.current && !searchBoxRef.current.contains(e.target)) {
-        setShowDropdown(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
-
-  async function fetchHealth() {
-    try {
-      const res = await fetch(`${API_BASE}/api/health`)
-      if (res.ok) {
-        const data = await res.json()
-        setHealthStatus(data)
-      }
-    } catch {
-      setHealthStatus({ status: 'offline', total_products: 0 })
-    }
-  }
-
-  async function fetchSampleUsers() {
-    try {
-      const res = await fetch(`${API_BASE}/api/users/sample`)
-      if (res.ok) {
-        const data = await res.json()
-        setSampleUsers(data)
-        if (data.length > 0) {
-          setSelectedUser(data[0]) // Select first active persona by default
-        }
-      }
-    } catch (err) {
-      console.error('Failed to load sample users', err)
-    }
-  }
-
-  async function performSearch(query) {
-    setIsSearching(true)
-    try {
-      const res = await fetch(`${API_BASE}/api/products/search?q=${encodeURIComponent(query)}&limit=8`)
-      if (res.ok) {
-        const data = await res.json()
-        // Filter out items already in basket
-        const currentIds = new Set(basket.map(i => i.product_id))
-        const filtered = data.filter(i => !currentIds.has(i.product_id))
-        setSearchResults(filtered)
-        setShowDropdown(true)
-      }
-    } catch (err) {
-      console.error('Search error', err)
-    } finally {
-      setIsSearching(false)
-    }
-  }
-
-  async function fetchPredictions() {
     setIsPredicting(true)
     setPredictionError(null)
+
     try {
       const payload = {
-        context_product_ids: basket.map(item => item.product_id),
-        user_id: selectedUser ? selectedUser.user_id : null,
-        order_number: selectedUser ? selectedUser.order_count + 1 : 10,
+        context_product_ids: currentBasket.map(item => item.product_id),
+        user_id: currentUser ? currentUser.user_id : null,
+        order_number: currentUser ? currentUser.order_count + 1 : 10,
         top_k: 4,
       }
 
@@ -144,11 +103,83 @@ export default function App() {
       setPredictions(data.predictions || [])
     } catch (err) {
       console.error('Prediction failed', err)
-      setPredictionError('Unable to refresh predictions')
+      setPredictionError('Unable to reach prediction engine (it may be cold-starting).')
     } finally {
       setIsPredicting(false)
     }
+  }, [])
+
+  useEffect(() => {
+    let isCancelled = false
+
+    async function triggerPredictions() {
+      if (!isCancelled) {
+        await refreshPredictions(basket, selectedUser)
+      }
+    }
+
+    triggerPredictions()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [basket, selectedUser, refreshPredictions])
+
+  function handleSearchChange(val) {
+    setSearchQuery(val)
+    if (!val.trim()) {
+      setSearchResults([])
+      setShowDropdown(false)
+    }
   }
+
+  // 3. Search autocomplete debounce
+  useEffect(() => {
+    const trimmed = searchQuery.trim()
+    if (!trimmed) {
+      return
+    }
+
+    let isCancelled = false
+
+    const timer = setTimeout(async () => {
+      if (!isCancelled) {
+        setIsSearching(true)
+      }
+      try {
+        const res = await fetch(`${API_BASE}/api/products/search?q=${encodeURIComponent(trimmed)}&limit=8`)
+        if (res.ok && !isCancelled) {
+          const data = await res.json()
+          const currentIds = new Set(basket.map(i => i.product_id))
+          const filtered = data.filter(i => !currentIds.has(i.product_id))
+          setSearchResults(filtered)
+          setShowDropdown(true)
+        }
+      } catch (err) {
+        console.error('Search error', err)
+      } finally {
+        if (!isCancelled) {
+          setIsSearching(false)
+        }
+      }
+    }, 200)
+
+    return () => {
+      isCancelled = true
+      clearTimeout(timer)
+    }
+  }, [searchQuery, basket])
+
+  // Click outside listener for search dropdown
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (searchBoxRef.current && !searchBoxRef.current.contains(e.target)) {
+        setShowDropdown(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   function addItem(product) {
     if (basket.some(i => i.product_id === product.product_id)) return
@@ -168,35 +199,33 @@ export default function App() {
   return (
     <div className="app-container">
       {/* Top Navigation */}
-      <header className="app-header">
+      <header className="site-header">
         <div className="header-inner">
-          <div className="brand-section">
-            <div className="brand-logo-badge" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
-              </svg>
-            </div>
+          <div className="brand-group">
+            <span className="brand-logo" aria-hidden="true">🛒</span>
             <div>
-              <h1 className="brand-title">CartWise Assistant</h1>
-              <p className="brand-subtitle">Explainable Forgotten Item Prevention</p>
+              <h1 className="brand-title">Smart Basket Assistant</h1>
+              <p className="brand-subtitle">Explainable Forgotten Item Predictor</p>
             </div>
           </div>
 
           <div className="header-controls">
-            {/* Persona Selector */}
-            <div className="persona-select-container">
-              <label htmlFor="persona-select" className="persona-label">Shopper Profile:</label>
+            {/* Shopper Persona Switcher */}
+            <div className="user-select-box">
+              <label htmlFor="user-selector" className="user-label">
+                Active Shopper Profile:
+              </label>
               <select
-                id="persona-select"
-                className="persona-select"
+                id="user-selector"
+                className="user-select"
                 value={selectedUser ? selectedUser.user_id : ''}
                 onChange={e => {
                   const val = e.target.value
                   if (val === '') {
                     setSelectedUser(null)
                   } else {
-                    const found = sampleUsers.find(u => u.user_id === parseInt(val))
-                    setSelectedUser(found || null)
+                    const u = sampleUsers.find(item => item.user_id === parseInt(val, 10))
+                    setSelectedUser(u || null)
                   }
                 }}
               >
@@ -256,10 +285,15 @@ export default function App() {
                   className="search-input"
                   placeholder="Search & add groceries (e.g., Avocado, Olive Oil, Eggs)…"
                   value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
+                  onChange={e => handleSearchChange(e.target.value)}
                   onFocus={() => searchQuery.trim() && setShowDropdown(true)}
                   aria-label="Search grocery products"
                 />
+                {isSearching && (
+                  <span className="search-spinner" aria-label="Searching catalog…" title="Searching catalog…">
+                    ⏳
+                  </span>
+                )}
               </div>
 
               {/* Autocomplete Dropdown */}
@@ -374,6 +408,20 @@ export default function App() {
                 ? `Personalized for User #${selectedUser.user_id} using purchase history & association rules.`
                 : 'Scored using collective grocery basket association rules.'}
             </p>
+
+            {predictionError && (
+              <div className="prediction-error-banner" role="alert" style={{
+                background: '#FEF2F2',
+                border: '1px solid #FECACA',
+                color: '#991B1B',
+                padding: '0.75rem 1rem',
+                borderRadius: '8px',
+                marginBottom: '1rem',
+                fontSize: '0.85rem'
+              }}>
+                {predictionError}
+              </div>
+            )}
 
             {/* Live region for accessibility */}
             <div aria-live="polite" className="predictions-container">

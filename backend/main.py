@@ -1,8 +1,9 @@
-from __future__ import annotations
-
+import logging
+import os
 from typing import Optional
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from backend.schemas import (
     HealthResponse,
@@ -13,20 +14,47 @@ from backend.schemas import (
 )
 from backend.service import get_service
 
+logger = logging.getLogger("shopping_assistant")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+
 app = FastAPI(
     title="Smart Shopping Assistant API",
     description="Explainable forgotten-item prediction engine powered by association rules and user history",
     version="1.0.0",
 )
 
-# Enable CORS for local Vite development
+# Parse allowed origins safely from environment or default to local dev ports
+env_origins = os.getenv("ALLOWED_ORIGINS", "")
+if env_origins.strip():
+    allowed_origins = [o.strip() for o in env_origins.split(",") if o.strip()]
+    allow_credentials = "*" not in allowed_origins
+else:
+    allowed_origins = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ]
+    allow_credentials = True
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=allowed_origins,
+    allow_credentials=allow_credentials,
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "geolocation=(), camera=(), microphone=()"
+    return response
 
 
 @app.get("/api/health", response_model=HealthResponse)
@@ -40,6 +68,7 @@ def health() -> HealthResponse:
             sample_users_count=len(service.sample_users),
         )
     except Exception as exc:
+        logger.error("Health check degradation: %s", exc)
         return HealthResponse(
             status=f"degraded: {str(exc)}",
             model="unknown",
@@ -50,7 +79,7 @@ def health() -> HealthResponse:
 
 @app.get("/api/products/search", response_model=list[ProductItem])
 def search_products(
-    q: str = Query("", description="Product search query substring"),
+    q: str = Query("", max_length=100, description="Product search query substring (max 100 chars)"),
     limit: int = Query(15, ge=1, le=50, description="Max products to return"),
 ) -> list[ProductItem]:
     service = get_service()
