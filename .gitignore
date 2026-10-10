@@ -17,11 +17,13 @@ data/raw/
 data/processed/
 models/*.pkl
 models/*.joblib
-backend/artifacts/*.pkl
 
 # Environment
 .env
 .env.*
+
+# Logs
+*.log
 
 # OS
 .DS_Store
@@ -35,3 +37,4 @@ Thumbs.db
 .claude/
 .codex/
 .opencode/
+.gemini/

@@ -10,6 +10,8 @@ const QUICK_STAPLES = [
   { product_id: 23909, product_name: '2% Reduced Fat Milk' },
 ]
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+
 export default function App() {
   const [basket, setBasket] = useState([
     { product_id: 24852, product_name: 'Banana' },
@@ -73,7 +75,7 @@ export default function App() {
 
   async function fetchHealth() {
     try {
-      const res = await fetch('/api/health')
+      const res = await fetch(`${API_BASE}/api/health`)
       if (res.ok) {
         const data = await res.json()
         setHealthStatus(data)
@@ -85,7 +87,7 @@ export default function App() {
 
   async function fetchSampleUsers() {
     try {
-      const res = await fetch('/api/users/sample')
+      const res = await fetch(`${API_BASE}/api/users/sample`)
       if (res.ok) {
         const data = await res.json()
         setSampleUsers(data)
@@ -101,7 +103,7 @@ export default function App() {
   async function performSearch(query) {
     setIsSearching(true)
     try {
-      const res = await fetch(`/api/products/search?q=${encodeURIComponent(query)}&limit=8`)
+      const res = await fetch(`${API_BASE}/api/products/search?q=${encodeURIComponent(query)}&limit=8`)
       if (res.ok) {
         const data = await res.json()
         // Filter out items already in basket
@@ -128,7 +130,7 @@ export default function App() {
         top_k: 4,
       }
 
-      const res = await fetch('/api/predict', {
+      const res = await fetch(`${API_BASE}/api/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
