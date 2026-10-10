@@ -1,0 +1,118 @@
+{
+  "test_rows": 10000,
+  "top_k": 3,
+  "hit_rate_at_k": 0.1046,
+  "recall_at_k": 0.1046,
+  "precision_at_k": 0.0349,
+  "coverage": 0.0919,
+  "sample_predictions": [
+    {
+      "user_id": 210,
+      "target_product_name": "Organic Strawberries",
+      "predictions": [
+        {
+          "product_id": 32030,
+          "score": 0.0047,
+          "reason": "Extra Sharp White Cheddar: strong user-history match"
+        },
+        {
+          "product_id": 10292,
+          "score": 0.0047,
+          "reason": "Family Size Shells & White Cheddar Macaroni & Cheese: strong user-history match"
+        },
+        {
+          "product_id": 33043,
+          "score": 0.0046,
+          "reason": "Crescent Rolls: strong user-history match"
+        }
+      ]
+    },
+    {
+      "user_id": 210,
+      "target_product_name": "Shredded Parmesan",
+      "predictions": [
+        {
+          "product_id": 32030,
+          "score": 0.0006,
+          "reason": "Extra Sharp White Cheddar: strong user-history match, supported by basket rules"
+        },
+        {
+          "product_id": 10292,
+          "score": 0.0006,
+          "reason": "Family Size Shells & White Cheddar Macaroni & Cheese: strong user-history match"
+        },
+        {
+          "product_id": 33043,
+          "score": 0.0006,
+          "reason": "Crescent Rolls: strong user-history match"
+        }
+      ]
+    },
+    {
+      "user_id": 210,
+      "target_product_name": "Organic Brown Rice",
+      "predictions": [
+        {
+          "product_id": 10292,
+          "score": 0.0002,
+          "reason": "Family Size Shells & White Cheddar Macaroni & Cheese: strong user-history match"
+        },
+        {
+          "product_id": 33043,
+          "score": 0.0002,
+          "reason": "Crescent Rolls: strong user-history match"
+        },
+        {
+          "product_id": 7559,
+          "score": 0.0002,
+          "reason": "Cinnamon Rolls with Icing: strong user-history match"
+        }
+      ]
+    },
+    {
+      "user_id": 210,
+      "target_product_name": "Sour Cream",
+      "predictions": [
+        {
+          "product_id": 32030,
+          "score": 0.0001,
+          "reason": "Extra Sharp White Cheddar: strong user-history match, supported by basket rules"
+        },
+        {
+          "product_id": 33043,
+          "score": 0.0001,
+          "reason": "Crescent Rolls: strong user-history match"
+        },
+        {
+          "product_id": 4799,
+          "score": 0.0001,
+          "reason": "Shredded Parmesan: strong user-history match, supported by basket rules"
+        }
+      ]
+    },
+    {
+      "user_id": 210,
+      "target_product_name": "Extra Sharp White Cheddar",
+      "predictions": [
+        {
+          "product_id": 32030,
+          "score": 0.0001,
+          "reason": "Extra Sharp White Cheddar: strong user-history match, supported by basket rules"
+        },
+        {
+          "product_id": 33043,
+          "score": 0.0001,
+          "reason": "Crescent Rolls: strong user-history match"
+        },
+        {
+          "product_id": 7559,
+          "score": 0.0001,
+          "reason": "Cinnamon Rolls with Icing: strong user-history match"
+        }
+      ]
+    }
+  ],
+  "train_baskets": 158000,
+  "train_examples": 25000,
+  "train_candidate_rows": 1307792
+}

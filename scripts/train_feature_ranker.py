@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ast
+import argparse
 import json
 from pathlib import Path
 import sys
@@ -15,9 +16,31 @@ from models.feature_ranker import FeatureRanker
 
 
 DEFAULT_TOP_K = 3
-USE_HISTORY_DATASET = "--history" in sys.argv
 MAX_HISTORY_TRAIN_EXAMPLES = 25_000
 MAX_HISTORY_TEST_EXAMPLES = 10_000
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--history", action="store_true", help="Use the user-history dataset.")
+    parser.add_argument(
+        "--train-limit",
+        type=int,
+        default=None,
+        help="Optional cap on the number of train examples after chronological splitting.",
+    )
+    parser.add_argument(
+        "--test-limit",
+        type=int,
+        default=None,
+        help="Optional cap on the number of test examples after chronological splitting.",
+    )
+    parser.add_argument(
+        "--output-suffix",
+        default="",
+        help="Optional suffix appended to the metrics filename before .json.",
+    )
+    return parser.parse_args()
 
 
 def log(message: str) -> None:
@@ -31,10 +54,10 @@ def parse_list_column(value: str) -> list[int] | list[str]:
     return parsed
 
 
-def load_baskets() -> pd.DataFrame:
+def load_baskets(use_history_dataset: bool) -> pd.DataFrame:
     filename = (
         "instacart_user_history_baskets.csv"
-        if USE_HISTORY_DATASET
+        if use_history_dataset
         else "instacart_baskets_sample.csv"
     )
     baskets = pd.read_csv(ROOT / "data" / "processed" / filename)
@@ -43,10 +66,10 @@ def load_baskets() -> pd.DataFrame:
     return baskets
 
 
-def load_examples() -> pd.DataFrame:
+def load_examples(use_history_dataset: bool) -> pd.DataFrame:
     filename = (
         "instacart_user_history_examples.csv"
-        if USE_HISTORY_DATASET
+        if use_history_dataset
         else "instacart_hidden_item_examples_sample.csv"
     )
     examples = pd.read_csv(ROOT / "data" / "processed" / filename)
@@ -56,15 +79,30 @@ def load_examples() -> pd.DataFrame:
 
 
 def split_by_order_number(
-    baskets: pd.DataFrame, examples: pd.DataFrame
-) -> tuple[pd.DataFrame, pd.DataFrame]:
+    baskets: pd.DataFrame,
+    examples: pd.DataFrame,
+    use_history_dataset: bool,
+    train_limit: int | None,
+    test_limit: int | None,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     cutoff = examples["order_number"].quantile(0.8)
     train_baskets = baskets[baskets["order_number"] <= cutoff].copy()
     train_examples = examples[examples["order_number"] <= cutoff].copy()
     test_examples = examples[examples["order_number"] > cutoff].copy()
-    if USE_HISTORY_DATASET:
-        train_examples = train_examples.head(MAX_HISTORY_TRAIN_EXAMPLES).copy()
-        test_examples = test_examples.head(MAX_HISTORY_TEST_EXAMPLES).copy()
+    if use_history_dataset:
+        effective_train_limit = (
+            train_limit if train_limit is not None else MAX_HISTORY_TRAIN_EXAMPLES
+        )
+        effective_test_limit = (
+            test_limit if test_limit is not None else MAX_HISTORY_TEST_EXAMPLES
+        )
+        train_examples = train_examples.head(effective_train_limit).copy()
+        test_examples = test_examples.head(effective_test_limit).copy()
+    else:
+        if train_limit is not None:
+            train_examples = train_examples.head(train_limit).copy()
+        if test_limit is not None:
+            test_examples = test_examples.head(test_limit).copy()
     return train_baskets, train_examples, test_examples
 
 
@@ -141,9 +179,16 @@ def evaluate_model(ranker: FeatureRanker, test_examples: pd.DataFrame, top_k: in
 
 
 def main() -> None:
-    baskets = load_baskets()
-    examples = load_examples()
-    train_baskets, train_examples, test_examples = split_by_order_number(baskets, examples)
+    args = parse_args()
+    baskets = load_baskets(args.history)
+    examples = load_examples(args.history)
+    train_baskets, train_examples, test_examples = split_by_order_number(
+        baskets,
+        examples,
+        use_history_dataset=args.history,
+        train_limit=args.train_limit,
+        test_limit=args.test_limit,
+    )
     product_names = build_product_name_map(baskets)
 
     ranker = FeatureRanker().fit(
@@ -156,13 +201,18 @@ def main() -> None:
     metrics["train_baskets"] = int(len(train_baskets))
     metrics["train_examples"] = int(len(train_examples))
     metrics["train_candidate_rows"] = int(len(training_rows))
+    metrics["dataset_variant"] = "history" if args.history else "sample"
+    metrics["train_limit"] = int(len(train_examples))
+    metrics["test_limit"] = int(len(test_examples))
 
     filename = (
-        "feature_ranker_metrics_history.json"
-        if USE_HISTORY_DATASET
-        else "feature_ranker_metrics.json"
+        "feature_ranker_metrics_history"
+        if args.history
+        else "feature_ranker_metrics"
     )
-    output_path = ROOT / "models" / filename
+    if args.output_suffix:
+        filename = f"{filename}_{args.output_suffix}"
+    output_path = ROOT / "models" / f"{filename}.json"
     output_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
 
     print(f"Train baskets: {len(train_baskets):,}")
