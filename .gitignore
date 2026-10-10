@@ -32,9 +32,12 @@ Thumbs.db
 # Binaries
 *.exe
 
-# Other harnesses
+# Other harnesses & AI metadata
 .agent/
+.agents/
+AGENTS.md
 .claude/
 .codex/
 .opencode/
 .gemini/
+
